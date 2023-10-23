@@ -80,7 +80,6 @@ def plot_dataframe(df1, color_sequence, sorting = True):
     df1.sort_index(axis=1, inplace=True)
     if sorting == True:
         df1 = sort_columns_high_to_low(df1)
-        st.write(df1)
         fig = px.line(df1, x=df1.index, y=df1.columns, color_discrete_sequence=color_sequence)
         fig.update_layout(
             legend=dict(bgcolor="rgba(0,0,0,0)"),
@@ -140,7 +139,7 @@ def plot_dataframe(df1, color_sequence, sorting = True):
     
  
     fig.update_yaxes(
-        range=[0, 600],
+        range=[-400, 600],
         title_text='Effekt [MW]',
         mirror=True,
         ticks="outside",
@@ -159,9 +158,6 @@ def plot_dataframe_moving_average(df1, color_sequence = "red", window_size = 168
         "OppgradertBygningsmasse" : "Oppgradert bygningsmasse",
         "BergvarmeSolFjernvarme" : "Bergvarme og sol"
     }
-    st.write("Timeverdier")
-    st.write(df1)
-    st.write("---")
     df1 = df1.copy()
     df1.rename(columns=column_mapping, inplace=True)
     window_size = window_size
@@ -177,9 +173,6 @@ def plot_dataframe_moving_average(df1, color_sequence = "red", window_size = 168
         ))
     else:
         fig = px.line(moving_avg, x=moving_avg.index, y=moving_avg.columns, color_discrete_sequence=color_sequence)
-    st.write("Glidende gjennomsnitt")
-    st.write(moving_avg)
-    st.write("---")
 
     fig.update_traces(
         #name = df.co,
@@ -216,7 +209,7 @@ def plot_dataframe_moving_average(df1, color_sequence = "red", window_size = 168
 
 
     fig.update_yaxes(
-        range=[0, 450],
+        range=[-100, 450],
         title_text='Effekt [MW]',
         mirror=True,
         ticks="outside",
@@ -700,8 +693,8 @@ def main():
         #with chart_container(df, tabs = ["Varighetskurver", "Se data", "Eksporter data"], export_formats=["CSV"]):
         fig = plot_dataframe(df1 = df, color_sequence = color_sequence, sorting = True)
         st.plotly_chart(fig, use_container_width = True, config = {'displayModeBar': False})
-        #with st.expander("Se data"):
-        #    st.write(df)
+        with st.expander("Se data"):
+            st.write(df)
 
         #--
         st.write("**Glidende gjennomsnitt**")
@@ -709,8 +702,8 @@ def main():
         #with chart_container(df, tabs = ["Årlig energibehov", "Se data", "Eksporter data"], export_formats=["CSV"]):
         fig1 = plot_dataframe_moving_average(df1 = df, color_sequence = color_sequence, window_size = 168)
         st.plotly_chart(fig1, use_container_width = True, config = {'displayModeBar': False})
-        #with st.expander("Se data"):
-        #    st.write(df)
+        with st.expander("Se data"):
+            st.write(df)
         st.warning("Tips! Skru av og på kurvene i tegnforklaringen for å isolere ulike scenarier.", icon="ℹ️")
         
         #--
